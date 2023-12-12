@@ -204,6 +204,61 @@ if ($conn->connect_error) {
         </form>
     </div>
 </div>
+<!--purchse history-->
+<div class="card">
+    <div class="card-header">
+        <h5>Purchase History</h5>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Date Purchased</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "urbantrade";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            
+            $username = $_SESSION['username'];
+            $sql = "SELECT * FROM orders WHERE username = '$username'";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                
+                while ($row = $result->fetch_assoc()) {
+                    ?>
+                    <tr>
+                        <td><?php echo $row['productname']; ?></td>
+                        <td><?php echo $row['quantity']; ?></td>
+                        <td><?php echo $row['totalprice']; ?></td>
+                        <td><?php echo $row['datepurchased']; ?></td>
+                    </tr>
+                <?php
+                }
+            } else {
+                echo "<p>No purchase history found.</p>";
+            }
+            $conn->close();
+            ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
