@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     <title>Seller Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        /* Your custom styles here */
+        
     </style>
 </head>
 
@@ -72,10 +72,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <a class="nav-link active" aria-current="page" href="#AddProducts">Add Products</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link active" aria-current="page" href="#MyProducts">My Products</a>
                     </li>
                 </ul>
                 <!--sellerlogout.php-->
@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
 
 <!-- Product addition form -->
-<div class="mt-5 mb-5">
+<div class="mt-5 mb-5" id="AddProducts">
     <h2>Add Product</h2>
     <form method="POST" enctype="multipart/form-data" class="border p-4 rounded">
         <div class="mb-3">
@@ -116,8 +116,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 </div>
 
 
-        <!-- Display seller's products -->
-        <div class="mt-5">
+    <div class="mt-5" id="MyProducts">
             <h2>My Products</h2>
             <?php
             $seller_id = $_SESSION['seller_id'];
@@ -138,7 +137,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                 echo "No products found.";
             }
             ?>
-        </div>
 
     </div>
 
