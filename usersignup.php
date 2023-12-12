@@ -18,17 +18,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $phonenumber = $_POST['phonenumber'];
+    //location
+    $location = $_POST['location'];
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users (username, email, password, phonenumber) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO users (username, email, password, phonenumber, location) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
-        $stmt->bind_param("ssss", $username, $email, $hashed_password, $phonenumber);
+        $stmt->bind_param("sssss", $username, $email, $hashed_password, $phonenumber, $location);
         if ($stmt->execute()) {
             $_SESSION['username'] = $username;
-            header("Location: dashboard.php");
+            header("Location: userlogin.php");
             exit();
         } else {
             $errorMessage = "Error in signup: " . $stmt->error;
@@ -50,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .grid{
                 display: grid;
                 place-items: center;
-                margin-top: 65px;
+                margin-top: 25px;
                 border-radius: 5px;
                 padding: 20px;
                 width: 400px;
@@ -92,6 +94,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="mb-3">
                 <label for="phonenumber">Phone Number</label>
                 <input type="tel" name="phonenumber" id="phonenumber" class="form-control" placeholder="Enter Phone Number">
+            </div>
+            <div class="mb-3">
+                <label for="location">Location</label>
+                <input type="text" name="location" id="location" class="form-control" placeholder="Enter Location">
             </div>
             <div class="mb-3">
                 <label for="password">Password</label>
