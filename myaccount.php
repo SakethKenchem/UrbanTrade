@@ -111,14 +111,15 @@ if ($conn->connect_error) {
             </div>
         </div>
     </nav>
-    <div class="card">
+
+<div class="card">
     <div class="card-header">
         <h5>User Details</h5>
     </div>
+
     <div class="card-body">
         <form method="POST">
             <?php
-            // Database connection setup
             $servername = "localhost";
             $username = "root";
             $password = "";
@@ -130,16 +131,16 @@ if ($conn->connect_error) {
             }
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                // Fetch and sanitize input data
+                
                 $email = $_POST['email'];
                 $phone = $_POST['phone'];
                 $address = $_POST['address'];
                 $username = $_POST['username'];
                 $password = $_POST['password'];
 
-                // Validate and update password if provided
+                
                 if (!empty($password)) {
-                    // Password encryption (using a hashing algorithm, e.g., bcrypt)
+                    
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                     $updatePasswordQuery = "UPDATE users SET password='$hashedPassword' WHERE username='$username'";
                     if ($conn->query($updatePasswordQuery) === TRUE) {
@@ -149,7 +150,7 @@ if ($conn->connect_error) {
                     }
                 }
 
-                // Update other details in the database
+                
                 $updateQuery = "UPDATE users SET email='$email', phonenumber='$phone', location='$address' WHERE username='$username'";
                 if ($conn->query($updateQuery) === TRUE) {
                     echo "<div class='alert alert-success' role='alert'>Details updated successfully!</div>";
@@ -158,37 +159,37 @@ if ($conn->connect_error) {
                 }
             }
 
-            // Fetch user details from the database based on the logged-in username
+            
             $username = $_SESSION['username'];
             $sql = "SELECT * FROM users WHERE username = '$username'";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    // Display user details in a Bootstrap form
+                    
                     ?>
                     <div class="mb-3">
-                        <!-- Username -->
+                        
                         <label for="username" class="form-label">Username:</label>
                         <input type="text" class="form-control" id="username" name="username" value="<?php echo $row['username']; ?>" readonly>
                     </div>
                     <div class="mb-3">
-                        <!-- Email -->
+                        
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" class="form-control" id="email" name="email" value="<?php echo $row['email']; ?>">
                     </div>
                     <div class="mb-3">
-                        <!-- Phone -->
+                        
                         <label for="phone" class="form-label">Phone:</label>
                         <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo $row['phonenumber']; ?>">
                     </div>
                     <div class="mb-3">
-                        <!-- Address -->
+                        
                         <label for="address" class="form-label">Address:</label>
                         <textarea class="form-control" id="address" name="address"><?php echo $row['location']; ?></textarea>
                     </div>
                     <div class="mb-3">
-                        <!-- Password -->
+                        
                         <label for="password" class="form-label">New Password:</label>
                         <input type="password" class="form-control" id="password" name="password">
                     </div>
