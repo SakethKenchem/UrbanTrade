@@ -6,7 +6,7 @@ $username = "root";
 $password = "";
 $dbname = "urbantrade";
 
-// Establishing a connection to the database
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -122,7 +122,6 @@ if ($conn->connect_error) {
         </div>
     </nav>
 
-    <!-- Featured Products Section -->
     <section class="featured-products">
         <div class="featured-product-card">
             <img src="product1.jpg" alt="Product 1" class="featured-product-img">
@@ -138,7 +137,6 @@ if ($conn->connect_error) {
             <p>$59.99</p>
             <button class="btn btn-primary">Add to Cart</button>
         </div>
-        <!-- Add more product cards as needed -->
     </section>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>

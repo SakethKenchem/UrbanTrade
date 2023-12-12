@@ -71,7 +71,6 @@
 
                     if ($conn->query($sql) === TRUE) {
                         echo '<div class="alert alert-success mt-3" role="alert">Signup successful!</div>';
-                        // Redirect to login page after 2 seconds
                         header("refresh:2; url=sellerlogin.php");
                     } else {
                         echo '<div class="alert alert-danger mt-3" role="alert">Error: ' . $conn->error . '</div>';

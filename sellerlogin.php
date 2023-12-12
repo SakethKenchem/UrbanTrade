@@ -5,18 +5,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Perform database connection
     $servername = "localhost";
     $username = "root";
     $password_db = "";
-    $dbname = "urbantrade"; // Your database name
+    $dbname = "urbantrade"; 
     $conn = new mysqli($servername, $username, $password_db, $dbname);
 
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Prepare SQL statement to retrieve seller's details based on email
     $stmt = $conn->prepare("SELECT seller_id, password FROM sellers WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -26,18 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $stored_password = $row['password'];
 
-        // Verify password
         if (password_verify($password, $stored_password)) {
-            // Password is correct, create session and redirect to seller dashboard
+
             $_SESSION['seller_id'] = $row['seller_id'];
             header("Location: sellerdashboard.php");
             exit();
         } else {
-            // Incorrect password
+
             echo "Incorrect password";
         }
     } else {
-        // No account found with that email
         echo "No account found with that email";
     }
 

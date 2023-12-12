@@ -6,14 +6,14 @@ $username = "root";
 $password = "";
 $dbname = "urbantrade";
 
-// Establishing a connection to the database
+
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Handle signup
+
     $username = $_POST['username'];
     $email = $_POST['email'];
     $password = $_POST['password'];
@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("ssss", $username, $email, $hashed_password, $phonenumber);
         if ($stmt->execute()) {
             $_SESSION['username'] = $username;
-            header("Location: dashboard.php"); // Redirect after successful signup
+            header("Location: dashboard.php");
             exit();
         } else {
             $errorMessage = "Error in signup: " . $stmt->error;
