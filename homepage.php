@@ -132,6 +132,12 @@ if ($conn->connect_error) {
     <div class="carousel-item">
       <img src="flashsales.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
     </div>
+    <div class="carousel-item">
+      <img src="lg.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
+    </div>
+    <div class="carousel-item">
+      <img src="lgmonitor.webp" class="d-block w-100" alt="..." style="width: 400px; height:450px;">
+    </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
