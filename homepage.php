@@ -14,8 +14,7 @@
         }
         .search-bar {
             width: 300px;
-            /* move the search bar slightly to the left*/
-            margin-left: 150px;
+            margin-left: 100px;
         }
         .account-cart {
             display: flex;
@@ -29,7 +28,6 @@
             justify-content: space-around;
             margin: 20px 0;
         }
-        /* Style each featured product card */
         .featured-product-card {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -38,7 +36,6 @@
             margin: 0 10px;
             text-align: center;
         }
-        /* Style product image */
         .featured-product-img {
             max-width: 100%;
             height: auto;
@@ -58,7 +55,7 @@
                         <a class="nav-link active" aria-current="page" href="homepage.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link" href="productcategories.php">Product Categories</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Pricing</a>
