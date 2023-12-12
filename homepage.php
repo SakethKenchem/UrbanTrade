@@ -73,9 +73,6 @@ if ($conn->connect_error) {
             <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="homepage.php">Home</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="productcategories.php">Product Categories</a>
                     </li>
                     <li class="nav-item">
