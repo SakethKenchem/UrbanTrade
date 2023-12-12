@@ -1,3 +1,21 @@
+<?php
+session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "urbantrade";
+
+// Establishing a connection to the database
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +31,8 @@
             margin-right: 10px;
         }
         .search-bar {
-            width: 300px;
-            margin-left: 100px;
+            width: 250px;
+            margin-left: 80px;
         }
         .account-cart {
             display: flex;
@@ -43,7 +61,8 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="homepage.php">Urban Trade KE</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,12 +95,18 @@
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="userlogin.php" class="nav-link">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="myaccount.php" class="nav-link">Account</a>
-                    </li>
+                    <?php if (isset($_SESSION['username'])) : ?>
+                        <li class="nav-item">
+                            <a href="myaccount.php" class="nav-link"><?php echo $_SESSION['username']; ?></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="userlogout.php" class="nav-link">Logout</a>
+                        </li>
+                    <?php else : ?>
+                        <li class="nav-item">
+                            <a href="userlogin.php" class="nav-link">Login</a>
+                        </li>
+                    <?php endif; ?>
                     <li class="nav-item">
                         <a href="cart.php" class="nav-link">
                             <div class="account-cart">
@@ -96,6 +121,7 @@
             </div>
         </div>
     </nav>
+
     <!-- Featured Products Section -->
     <section class="featured-products">
         <div class="featured-product-card">
