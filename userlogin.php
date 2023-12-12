@@ -72,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <nav class="navbar bg-body-none">
         <div class="container-fluid">
-          <a class="navbar-brand" style="font-size: x-large;">Urban Trade KE</a>
+          <a class="navbar-brand" style="font-size: x-large;" href="homepage.php">Urban Trade KE</a>
         </div>
     </nav>
     <div class="grid">
