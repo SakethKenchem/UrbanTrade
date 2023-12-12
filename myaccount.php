@@ -21,8 +21,6 @@ if ($conn->connect_error) {
     <title>My Account</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        /* Add your custom styles here */
-        /* For example: */
         .container {
             margin-top: 50px;
         }
@@ -45,6 +43,11 @@ if ($conn->connect_error) {
         }
         .account-cart svg {
             margin-left: 8px;
+        }
+        .card{
+            margin-top: 50px;
+            width: 600px;
+            margin-left: 400px;
         }
     </style>
 </head>
@@ -108,56 +111,98 @@ if ($conn->connect_error) {
             </div>
         </div>
     </nav>
-    <div class="container">
-        <h1 class="mb-4">My Account Details</h1>
-        <?php
-
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "urbantrade";
-
-        // Establishing a connection to the database
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-
-        if (!isset($_SESSION['username'])) {
-            header("Location: userlogin.php"); // Redirect if not logged in
-            exit();
-        }
-
-        // Fetch user details from the database based on the logged-in username
-        $username = $_SESSION['username'];
-        $sql = "SELECT * FROM users WHERE username = '$username'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            // Display user details
-            while ($row = $result->fetch_assoc()) {
-                // Display user details in a Bootstrap card
-        ?>
-                <div class="card">
-                    <div class="card-header">
-                        <h5>User Details</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text"><strong>Username:</strong> <?php echo $row['username']; ?></p>
-                        <p class="card-text"><strong>Email:</strong> <?php echo $row['email']; ?></p>
-                        <p class="card-text"><strong>Phone:</strong> <?php echo $row['phonenumber']; ?></p>
-                        <p class="card-text"><strong>Address:</strong> <?php echo $row['location']; ?></p>
-                        <!-- Display other details accordingly -->
-                    </div>
-                </div>
-        <?php
-            }
-        } else {
-            echo "<p>No user found with this username.</p>";
-        }
-        $conn->close();
-        ?>
+    <div class="card">
+    <div class="card-header">
+        <h5>User Details</h5>
     </div>
+    <div class="card-body">
+        <form method="POST">
+            <?php
+            // Database connection setup
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "urbantrade";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                // Fetch and sanitize input data
+                $email = $_POST['email'];
+                $phone = $_POST['phone'];
+                $address = $_POST['address'];
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+
+                // Validate and update password if provided
+                if (!empty($password)) {
+                    // Password encryption (using a hashing algorithm, e.g., bcrypt)
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                    $updatePasswordQuery = "UPDATE users SET password='$hashedPassword' WHERE username='$username'";
+                    if ($conn->query($updatePasswordQuery) === TRUE) {
+                        echo "<div class='alert alert-success' role='alert'>Password updated successfully!</div>";
+                    } else {
+                        echo "<div class='alert alert-danger' role='alert'>Error updating password: " . $conn->error . "</div>";
+                    }
+                }
+
+                // Update other details in the database
+                $updateQuery = "UPDATE users SET email='$email', phonenumber='$phone', location='$address' WHERE username='$username'";
+                if ($conn->query($updateQuery) === TRUE) {
+                    echo "<div class='alert alert-success' role='alert'>Details updated successfully!</div>";
+                } else {
+                    echo "<div class='alert alert-danger' role='alert'>Error updating details: " . $conn->error . "</div>";
+                }
+            }
+
+            // Fetch user details from the database based on the logged-in username
+            $username = $_SESSION['username'];
+            $sql = "SELECT * FROM users WHERE username = '$username'";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    // Display user details in a Bootstrap form
+                    ?>
+                    <div class="mb-3">
+                        <!-- Username -->
+                        <label for="username" class="form-label">Username:</label>
+                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $row['username']; ?>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <!-- Email -->
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $row['email']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <!-- Phone -->
+                        <label for="phone" class="form-label">Phone:</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" value="<?php echo $row['phonenumber']; ?>">
+                    </div>
+                    <div class="mb-3">
+                        <!-- Address -->
+                        <label for="address" class="form-label">Address:</label>
+                        <textarea class="form-control" id="address" name="address"><?php echo $row['location']; ?></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <!-- Password -->
+                        <label for="password" class="form-label">New Password:</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                <?php
+                }
+            } else {
+                echo "<p>No user found with this username.</p>";
+            }
+            $conn->close();
+            ?>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
