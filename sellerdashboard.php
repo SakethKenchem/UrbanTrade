@@ -10,27 +10,34 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+//make sure no one can access this page without logging in
+if (!isset($_SESSION['seller_id'])) {
+    header("Location: sellerlogin.php");
+}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $name = $_POST['name'];
+    //seller name
+    $seller_name = $_SESSION['seller_name'];
     $description = $_POST['description'];
+    $category = $_POST['category'];
     $price = $_POST['price'];
     $seller_id = $_SESSION['seller_id'];
 
-    // File upload handling
+
     $target_dir = "productuploads/";
     $target_file = $target_dir . basename($_FILES["image"]["name"]);
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    // ... (same file upload validation as before)
 
     if ($uploadOk == 0) {
         echo "Sorry, your file was not uploaded.";
     } else {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             $image_url = $target_file;
-            $sql = "INSERT INTO products (seller_id, name, description, price, image_url) VALUES ('$seller_id', '$name', '$description', '$price', '$image_url')";
+            $sql = "INSERT INTO products (seller_id, name, description, price, category, image_url) VALUES ('$seller_id', '$name', '$description', '$price', '$category','$image_url')";
             if ($conn->query($sql) === TRUE) {
                 echo "Product added successfully!";
             } else {
@@ -41,22 +48,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        
+        body {
+            background-color: #f8f9fa;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
-
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -88,24 +95,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 
     <div class="container mt-4">
 
-    <h1>Welcome, <?php echo $_SESSION['seller_name']; ?>!</h1>
+    <h1>Welcome, <?php echo $_SESSION['seller_name']; ?> 👋!</h1>
 
 
-<!-- Product addition form -->
 <div class="mt-5 mb-5" id="AddProducts">
     <h2>Add Product</h2>
     <form method="POST" enctype="multipart/form-data" class="border p-4 rounded">
         <div class="mb-3">
             <label for="productName" class="form-label">Product Name</label>
-            <input type="text" class="form-control" id="productName" name="name">
+            <input type="text" class="form-control" id="productName" name="name" placeholder="Enter Product Name">
         </div>
         <div class="mb-3">
             <label for="productDescription" class="form-label">Description</label>
-            <textarea class="form-control" id="productDescription" name="description" rows="3"></textarea>
+            <textarea class="form-control" id="productDescription" name="description" rows="3" placeholder="Enter Description"></textarea>
         </div>
         <div class="mb-3">
             <label for="productPrice" class="form-label">Price</label>
-            <input type="text" class="form-control" id="productPrice" name="price">
+            <input type="text" class="form-control" id="productPrice" name="price" placeholder="Enter Price">
+        </div>
+        <div class="mb-3">
+            <label for="productCategory" class="form-label">Category</label>
+            <select class="form-select" id="productCategory" name="category">
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Home">Home</option>
+                <option value="Beauty">Beauty</option>
+                <option value="Sports">Sports</option>
+                <option value="Books">Books</option>
+                <option value="Toys">Toys</option>
+                <option value="Food">Food</option>
+                <option value="Stationery">Stationery</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Health">Health</option>
+                <option value="Baby Products">Baby Products</option>
+                <option value="Automotive">Automotive</option>
+                <option value="Pet Supplies">Pet Supplies</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Movies">Movies</option>
+                <option value="Music">Music</option>
+                <option value="Garden">Garden</option>
+                <option value="Tools">Tools</option>
+                <option value="Grocery">Grocery</option>
+                <option value="Jewelry">Jewelry</option>
+                <option value="Shoes">Shoes</option>
+                <option value="Handmade">Handmade</option>
+                <option value="Software">Software</option>
+                <option value="Video Games">Video Games</option>
+                <option value="Arts">Arts</option>
+                <option value="Collectibles">Collectibles</option>
+                <option value="Digital Media">Digital Media</option>
+                <option value="Appliances">Appliances</option>
+                <option value="Luggage">Luggage</option>
+                <option value="Musical Instruments">Musical Instruments</option>
+                <option value="Office Products">Office Products</option>
+                <option value="Watches">Watches</option>
+                <option value="Software">Software</option>
+                <option value="Other">Other</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="productImage" class="form-label">Image</label>
@@ -130,7 +176,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
                     echo "<div class='card-body'>";
                     echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
                     echo "<p class='card-text'>" . $product_row['description'] . "</p>";
-                    echo "<p class='card-text'>$" . $product_row['price'] . "</p>";
+                    echo "<p class='card-text'>" . $product_row['category'] . "</p>";
+                    echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
                     echo "</div></div>";
                 }
             } else {
