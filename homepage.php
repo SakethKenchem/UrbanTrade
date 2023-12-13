@@ -186,7 +186,7 @@ $result = $conn->query($sql);
                 <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="featured-product-img">
                 <h5><?php echo $row['name']; ?></h4>
                 <p style="font-size: small;"><b>Desc.: </b><?php echo $row['description']; ?></p>
-                <p><b>Price: </b>$<?php echo $row['price']; ?></p>
+                <p><b>Price: </b>Ksh. <?php echo $row['price']; ?></p>
                 <!--seller name-->
                 <p><b>Seller:</b> <?php echo $row['seller_name']; ?></p>
                 <button class="btn btn-primary">Add to Cart</button>
