@@ -122,7 +122,7 @@ if (isset($_GET['product_id'])) {
                 </div>
                 <div class="col-md-6">
                     <h2><?php echo $row['name']; ?></h2>
-                    <p><b>Price: </b>$<?php echo $row['price']; ?></p>
+                    <p><b>Price: </b>Ksh. <?php echo $row['price']; ?></p>
                     <p><b>Category: </b><?php echo $row['category']; ?></p>
                     <p><b>Description: </b><?php echo $row['description']; ?></p>
                     <p><b>Seller: </b><?php echo $row['seller_name']; ?></p>

@@ -11,6 +11,11 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
+// no access if not logged in
+if (!isset($_SESSION['username'])) {
+    header('location: userlogin.php');
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -63,10 +68,10 @@ if ($conn->connect_error) {
             <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="productcategories.php">Product Categories</a>
+                        <a class="nav-link" href="#userdetails">User Details</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link" href="#purchasehistory">Purchase History</a>
                     </li>
                     <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -116,7 +121,7 @@ if ($conn->connect_error) {
 
 <div class="card">
     <div class="card-header">
-        <h5>User Details</h5>
+        <h5 id="userdetails">User Details</h5>
     </div>
 
     <div class="card-body">
@@ -209,7 +214,7 @@ if ($conn->connect_error) {
 <!--purchse history-->
 <div class="card">
     <div class="card-header">
-        <h5>Purchase History</h5>
+        <h5 id="purchasehistory">Purchase History</h5>
     </div>
 
     <div class="card-body">

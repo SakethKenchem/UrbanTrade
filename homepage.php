@@ -24,7 +24,7 @@ if ($conn->connect_error) {
     <style>
         body{
             background-color: #f5f5f5;
-            margin-bottom: 50px;
+            margin-bottom: 100px;
         }
         .nav-link {
             color: black;
@@ -62,9 +62,20 @@ if ($conn->connect_error) {
         text-overflow: ellipsis; 
         white-space: nowrap; 
     }
+    .featured-product-card:hover {
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        transform: scale(1.01);
+
+    }
     .featured-product-img {
         max-width: 100%;
         height: auto;
+    }
+    .featured-product-card .btn-secondary {
+        display: none;
+    }
+    .featured-product-card:hover .btn-secondary {
+        display: block;
     }
     </style>
 </head>
