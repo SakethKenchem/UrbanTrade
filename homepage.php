@@ -6,13 +6,34 @@ $username = "root";
 $password = "";
 $dbname = "urbantrade";
 
-
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+
+if (!empty($searchQuery)) {
+    $stmt = $conn->prepare("SELECT p.product_id FROM products p WHERE p.name LIKE ?");
+    $searchParam = "%{$searchQuery}%";
+    $stmt->bind_param("s", $searchParam);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        header("Location: productdetails.php?product_id=" . $row['product_id']);
+        exit();
+    } else {
+        echo "No search results found";
+    }
+
+    $stmt->close();
+}
+
+// Rest of your HTML and PHP code remains unchanged...
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,8 +84,7 @@ if ($conn->connect_error) {
         white-space: nowrap; 
     }
     .featured-product-card:hover {
-        box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        transform: scale(1.01);
+        transform: scale(1.03);
 
     }
     .featured-product-img {
@@ -76,69 +96,96 @@ if ($conn->connect_error) {
     }
     .featured-product-card:hover .btn-secondary {
         display: block;
+        margin-top: 5px;
     }
     </style>
 </head>
 <body>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="homepage.php" style="margin-top: 4px;">
-            <img img src="Urban Trade KE logo.jpeg" alt="Urban Trade Logo" height="40" width="40" class="d-inline-block align-text-top me-2">    
-            Urban Trade KE</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="productcategories.php">Product Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown link
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-                <ul class="navbar-nav">
-                    <?php if (isset($_SESSION['username'])) : ?>
-                        <li class="nav-item">
-                            <a href="myaccount.php" class="nav-link"><?php echo $_SESSION['username']; ?></a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="userlogout.php" class="nav-link">Logout</a>
-                        </li>
-                    <?php else : ?>
-                        <li class="nav-item">
-                            <a href="userlogin.php" class="nav-link">Login</a>
-                        </li>
-                    <?php endif; ?>
-                    <li class="nav-item">
-                        <a href="cart.php" class="nav-link">
-                            <div class="account-cart">
-                                <span>Cart</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
-                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                                </svg>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="homepage.php" style="margin-top: 4px;">
+            <img src="Urban Trade KE logo.jpeg" alt="Urban Trade Logo" height="40" width="40" class="d-inline-block align-text-top me-2">
+            Urban Trade KE
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="productcategories.php">Product Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown link
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- Update your search form action -->
+            <form class="d-flex" action="productlists.php" method="get">
+                <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
+                <!-- ^ Add 'name="search"' to the input field to pass the search term -->
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <section class="featured-products">
+                <?php
+                $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+
+                if (!empty($searchQuery)) {
+                    $stmt = $conn->prepare("SELECT p.product_id, p.name FROM products p WHERE p.name LIKE ?");
+                    $searchParam = "%{$searchQuery}%";
+                    $stmt->bind_param("s", $searchParam);
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<a href="productdetails.php?product_id=' . $row['product_id'] . '">' . $row['name'] . '</a><br>';
+                        }
+                    } else {
+                        echo "No search results found";
+                    }
+
+                    $stmt->close();
+                }
+                ?>
+            </section>
         </div>
-    </nav>
+        <ul class="navbar-nav">
+            <?php if (isset($_SESSION['username'])) : ?>
+                <li class="nav-item">
+                    <a href="myaccount.php" class="nav-link"><?php echo $_SESSION['username']; ?></a>
+                </li>
+                <li class="nav-item">
+                    <a href="userlogout.php" class="nav-link">Logout</a>
+                </li>
+            <?php else : ?>
+                <li class="nav-item">
+                    <a href="userlogin.php" class="nav-link">Login</a>
+                </li>
+            <?php endif; ?>
+            <li class="nav-item">
+                <a href="cart.php" class="nav-link">
+                    <div class="account-cart">
+                        <span>Cart</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                        </svg>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">

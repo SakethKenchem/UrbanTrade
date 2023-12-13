@@ -48,6 +48,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         }
     }
 }
+// Add code to delete a product
+if (isset($_GET['delete_product_id'])) {
+    $product_id = $_GET['delete_product_id'];
+    $sql = "DELETE FROM products WHERE product_id = '$product_id'";
+    if ($conn->query($sql) === TRUE) {
+        echo "Product deleted successfully!";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -162,30 +173,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
 </div>
 
 
-    <div class="mt-5" id="MyProducts">
-            <h2>My Products</h2>
-            <?php
-            $seller_id = $_SESSION['seller_id'];
-            $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
-            $products_result = $conn->query($products_sql);
+// Existing code...
 
-            if ($products_result->num_rows > 0) {
-                while ($product_row = $products_result->fetch_assoc()) {
-                    echo "<div class='card' style='width: 18rem; display: inline-block; margin: 10px;'>";
-                    echo "<img src='" . $product_row['image_url'] . "' class='card-img-top' alt='Product Image'>";
-                    echo "<div class='card-body'>";
-                    echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
-                    echo "<p class='card-text'>" . $product_row['description'] . "</p>";
-                    echo "<p class='card-text'>" . $product_row['category'] . "</p>";
-                    echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
-                    echo "</div></div>";
-                }
+<div class="mt-5" id="MyProducts">
+    <h2>My Products</h2>
+    <?php
+    $seller_id = $_SESSION['seller_id'];
+    $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
+    $products_result = $conn->query($products_sql);
+
+    if ($products_result->num_rows > 0) {
+        while ($product_row = $products_result->fetch_assoc()) {
+            echo "<div class='card' style='width: 18rem; display: inline-block; margin: 10px;'>";
+            echo "<img src='" . $product_row['image_url'] . "' class='card-img-top' alt='Product Image'>";
+            echo "<div class='card-body'>";
+            echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
+            
+            // Display a truncated description with a maximum length of characters
+            $maxDescriptionLength = 100; // Set your desired maximum character limit
+            $description = $product_row['description'];
+            if (strlen($description) > $maxDescriptionLength) {
+                $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
+                echo "<p class='card-text'>" . $truncatedDescription . "</p>";
             } else {
-                echo "No products found.";
+                echo "<p class='card-text'>" . $description . "</p>";
             }
-            ?>
+            
+            echo "<p class='card-text'>" . $product_row['category'] . "</p>";
+            echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
+            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary'>View Details</a>";
+            echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'>Edit Product</a>";
+            
+            // Add a button to delete the product with a confirmation dialog, logic to delete code is in this file
+            echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete Product</a>";
 
-    </div>
+
+            echo "</div></div>";
+        }
+    } else {
+        echo "No products found.";
+    }
+
+    ?>
+</div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
