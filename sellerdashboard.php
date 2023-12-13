@@ -172,9 +172,6 @@ if (isset($_GET['delete_product_id'])) {
     </form>
 </div>
 
-
-// Existing code...
-
 <div class="mt-5" id="MyProducts">
     <h2>My Products</h2>
     <?php
@@ -189,8 +186,7 @@ if (isset($_GET['delete_product_id'])) {
             echo "<div class='card-body'>";
             echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
             
-            // Display a truncated description with a maximum length of characters
-            $maxDescriptionLength = 100; // Set your desired maximum character limit
+            $maxDescriptionLength = 120; // Set your desired maximum character limit
             $description = $product_row['description'];
             if (strlen($description) > $maxDescriptionLength) {
                 $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
@@ -204,7 +200,7 @@ if (isset($_GET['delete_product_id'])) {
             echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary'>View Details</a>";
             echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'>Edit Product</a>";
             
-            // Add a button to delete the product with a confirmation dialog, logic to delete code is in this file
+            // button to delete the product with a confirmation dialog, logic to delete code is in this file
             echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete Product</a>";
 
 

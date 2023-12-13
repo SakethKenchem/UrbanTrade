@@ -41,6 +41,8 @@ if (!empty($searchQuery)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
+    <!--favicon-->
+    <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
         body{
@@ -84,6 +86,8 @@ if (!empty($searchQuery)) {
         white-space: nowrap; 
     }
     .featured-product-card:hover {
+        border-color: #999;
+        box-shadow: 0 0 10px #999;
         transform: scale(1.03);
 
     }
