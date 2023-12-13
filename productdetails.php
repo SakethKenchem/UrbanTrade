@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -12,19 +11,20 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
+    <title>View Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        body{
-            background-color: #f5f5f5;
-            margin-bottom: 50px;
+        .container {
+            display: flex;
+            justify-content: left;
+            flex-wrap: wrap;
         }
         .nav-link {
             color: black;
@@ -44,31 +44,8 @@ if ($conn->connect_error) {
             margin-left: 8px;
         }
 
-        .featured-products {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: left;
-            margin: 20px 0;
-        }
-
-    .featured-product-card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        width: 320px; 
-        margin: 10px;
-        text-align: center;
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-        white-space: nowrap; 
-    }
-    .featured-product-img {
-        max-width: 100%;
-        height: auto;
-    }
     </style>
 </head>
-<body>
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -128,83 +105,43 @@ if ($conn->connect_error) {
             </div>
         </div>
     </nav>
-
-<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="onlineshopping.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
-    </div>
-    <div class="carousel-item">
-      <img src="s23.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
-    </div>
-    <div class="carousel-item">
-      <img src="flashsales.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
-    </div>
-    <div class="carousel-item">
-      <img src="lg.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
-    </div>
-    <div class="carousel-item">
-      <img src="lgmonitor.webp" class="d-block w-100" alt="..." style="width: 400px; height:450px;">
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "urbantrade";
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$sql = "SELECT p.*, s.seller_name FROM products p INNER JOIN sellers s ON p.seller_id = s.seller_id LIMIT 5"; // Assuming you want to display 2 featured products
-$result = $conn->query($sql);
-
-?>
-<div style="margin-left: 30px; margin-top: 10px;">
-    <h2>Featured Products</h2>
-</div>   
-<section class="featured-products">
-
-
     <?php
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            ?>
-            <div class="featured-product-card">
-                <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="featured-product-img">
-                <h5><?php echo $row['name']; ?></h4>
-                <p style="font-size: small;"><b>Desc.: </b><?php echo $row['description']; ?></p>
-                <p><b>Price: </b>$<?php echo $row['price']; ?></p>
-                <!--seller name-->
-                <p><b>Seller:</b> <?php echo $row['seller_name']; ?></p>
-                <button class="btn btn-primary">Add to Cart</button>
-                <!--view product details-->
-                <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" class="btn btn-secondary">View Details</a>
-            </div>
-            <?php
-        }
-    } else {
-        echo "No featured products available";
-    }
-    ?>
-</section>
 
-<?php
-$conn->close(); 
+
+if (isset($_GET['product_id'])) {
+    $product_id = $_GET['product_id'];
+    $sql = "SELECT p.*, s.seller_name FROM products p INNER JOIN sellers s ON p.seller_id = s.seller_id WHERE product_id = '$product_id'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        ?>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="img-fluid">
+                </div>
+                <div class="col-md-6">
+                    <h2><?php echo $row['name']; ?></h2>
+                    <p><b>Price: </b>$<?php echo $row['price']; ?></p>
+                    <p><b>Category: </b><?php echo $row['category']; ?></p>
+                    <p><b>Description: </b><?php echo $row['description']; ?></p>
+                    <p><b>Seller: </b><?php echo $row['seller_name']; ?></p>
+                    <button class="btn btn-primary">Add to Cart</button>
+                    
+                    <div style="margin-top: 5px;"><a href="homepage.php">
+                    <button class="btn btn-success">Back</button>
+                    </a></div>
+                </div>
+            </div>
+        </div>
+        <?php
+    } else {
+        echo "No product found";
+    }
+}
 ?>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
 </body>
 </html>
