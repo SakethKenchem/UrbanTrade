@@ -18,7 +18,7 @@ if ($conn->connect_error) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account</title>
+    <title>Product Categories</title>
     <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
@@ -47,8 +47,6 @@ if ($conn->connect_error) {
         }
         .card{
             margin-top: 50px;
-            width: 600px;
-            margin-left: 400px;
         }
     </style>
 </head>
@@ -113,5 +111,42 @@ if ($conn->connect_error) {
     </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+<!-- ... (Previous HTML code) -->
+
+<div class="container mt-4">
+    <h2>Product Categories</h2>
+
+    <div class="row">
+        <?php
+        $category_query = "SELECT DISTINCT category FROM products";
+        $category_result = $conn->query($category_query);
+
+        if ($category_result->num_rows > 0) {
+            while ($category_row = $category_result->fetch_assoc()) {
+                $category = $category_row['category'];
+                // Query to count products in each category
+                $count_query = "SELECT COUNT(*) AS total FROM products WHERE category = '$category'";
+                $count_result = $conn->query($count_query);
+                $count_row = $count_result->fetch_assoc();
+                $total_products = $count_row['total'];
+        ?>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo $category; ?></h5>
+                            <p class="card-text">Total Products: <?php echo $total_products; ?></p>
+                            <a href="productlists.php?category=<?php echo urlencode($category); ?>" class="btn btn-primary">View Products</a>
+                        </div>
+                    </div>
+                </div>
+        <?php
+            }
+        } else {
+            echo "No categories found.";
+        }
+        ?>
+    </div>
+</div>
+    
 </body>
 </html>

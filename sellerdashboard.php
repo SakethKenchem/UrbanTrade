@@ -58,7 +58,24 @@ if (isset($_GET['delete_product_id'])) {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+// Logic to handle search feature
+if (isset($_GET['search'])) {
+    $search = $_GET['search'];
+    $seller_id = $_SESSION['seller_id'];
+    $search = "%" . $search . "%";
+    $stmt = $conn->prepare("SELECT * FROM products WHERE seller_id = ? AND (name LIKE ? OR description LIKE ? OR category LIKE ?)");
+    $stmt->bind_param("isss", $seller_id, $search, $search, $search);
+    $stmt->execute();
+    $products_result = $stmt->get_result();
 
+    if ($products_result->num_rows === 0) {
+        echo "<div class='alert alert-info' role='alert'>No products found.</div>";
+    }
+} else {
+    $seller_id = $_SESSION['seller_id'];
+    $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
+    $products_result = $conn->query($products_sql);
+}
 ?>
 
 <!DOCTYPE html>
@@ -73,6 +90,7 @@ if (isset($_GET['delete_product_id'])) {
             background-color: #f8f9fa;
             margin-bottom: 30px;
         }
+        
     </style>
 </head>
 <body>
@@ -174,6 +192,14 @@ if (isset($_GET['delete_product_id'])) {
 
 <div class="mt-5" id="MyProducts">
     <h2>My Products</h2>
+    <!--search bar to search for various parameters-->
+    <form method="GET" action="sellerdashboard.php">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search for products" aria-label="Search for products" aria-describedby="button-addon2" name="search">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+        </div>
+    </form>
+
     <?php
     $seller_id = $_SESSION['seller_id'];
     $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
@@ -197,7 +223,7 @@ if (isset($_GET['delete_product_id'])) {
             
             echo "<p class='card-text'>" . $product_row['category'] . "</p>";
             echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
-            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary'>View Details</a>";
+            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary' style='margin-right: 5px; margin-bottom: 5px;'>View Details</a>";
             echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'>Edit Product</a>";
             
             // button to delete the product with a confirmation dialog, logic to delete code is in this file
