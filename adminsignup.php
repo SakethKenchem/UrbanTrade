@@ -1,4 +1,5 @@
 <?php
+session_name("adminsession");
 session_start();
 
 $servername = "localhost";
@@ -27,6 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($sql) === TRUE) {
         echo "New record created successfully";
+        header("Location: adminlogin.php");
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -66,6 +68,7 @@ $conn->close();
                         <input type="email" class="form-control" id="email" name="email" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Sign Up</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='adminlogin.php'">Log In</button>
                 </form>
             </div>
         </div>
