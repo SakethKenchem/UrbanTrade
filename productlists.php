@@ -25,7 +25,6 @@ $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
     <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
-        /* Your CSS styles here */
         .product-card {
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -33,11 +32,9 @@ $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
             width: 320px;
             margin-bottom: 20px;
         }
-
         .product-card:hover {
             transform: scale(1.03);
         }
-
         .product-card img {
             max-width: 100%;
             height: auto;
