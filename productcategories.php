@@ -6,7 +6,6 @@ $username = "root";
 $password = "";
 $dbname = "urbantrade";
 
-
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -137,30 +136,24 @@ if ($conn->connect_error) {
 </nav>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-<!-- ... (Previous HTML code) -->
 
 <div class="container mt-4">
     <h2>Product Categories</h2>
-
     <div class="row">
         <?php
-        $category_query = "SELECT DISTINCT category FROM products";
-        $category_result = $conn->query($category_query);
+        $categoryQuery = "SELECT category, COUNT(*) AS total FROM products GROUP BY category";
+        $categoryResult = $conn->query($categoryQuery);
 
-        if ($category_result->num_rows > 0) {
-            while ($category_row = $category_result->fetch_assoc()) {
-                $category = $category_row['category'];
-                // Query to count products in each category
-                $count_query = "SELECT COUNT(*) AS total FROM products WHERE category = '$category'";
-                $count_result = $conn->query($count_query);
-                $count_row = $count_result->fetch_assoc();
-                $total_products = $count_row['total'];
+        if ($categoryResult->num_rows > 0) {
+            while ($categoryRow = $categoryResult->fetch_assoc()) {
+                $category = $categoryRow['category'];
+                $totalProducts = $categoryRow['total'];
         ?>
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo $category; ?></h5>
-                            <p class="card-text">Total Products: <?php echo $total_products; ?></p>
+                            <p class="card-text">Total Products: <?php echo $totalProducts; ?></p>
                             <a href="productlists.php?category=<?php echo urlencode($category); ?>" class="btn btn-primary">View Products</a>
                         </div>
                     </div>
@@ -174,5 +167,10 @@ if ($conn->connect_error) {
     </div>
 </div>
     
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>
