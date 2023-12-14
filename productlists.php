@@ -35,7 +35,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
         <a href="homepage.php" class="btn btn-primary">Back to Homepage</a>
     </div>
     <div class="container">
-        <h2>Results</h2>
+        <!--results for search query-->
+        <h2>Results for "<?php echo $searchQuery; ?>"</h2>
         <div class="row">
             <?php
             $query = "SELECT * FROM products";
