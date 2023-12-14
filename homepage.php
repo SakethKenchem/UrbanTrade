@@ -135,32 +135,34 @@ if (!empty($searchQuery)) {
                 </li>
             </ul>
             <!-- Update your search form action -->
-            <form class="d-flex" action="productlists.php" method="get">
-                <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
-                <!-- ^ Add 'name="search"' to the input field to pass the search term -->
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <form class="d-flex" action="productlists.php" method="GET">
+    <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
+    <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+
+
             <section class="featured-products">
                 <?php
-                $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+$searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
-                if (!empty($searchQuery)) {
-                    $stmt = $conn->prepare("SELECT p.product_id, p.name FROM products p WHERE p.name LIKE ?");
-                    $searchParam = "%{$searchQuery}%";
-                    $stmt->bind_param("s", $searchParam);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
+if (!empty($searchQuery)) {
+    $stmt = $conn->prepare("SELECT p.product_id, p.name FROM products p WHERE p.name LIKE ?");
+    $searchParam = "%{$searchQuery}%";
+    $stmt->bind_param("s", $searchParam);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-                    if ($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            echo '<a href="productdetails.php?product_id=' . $row['product_id'] . '">' . $row['name'] . '</a><br>';
-                        }
-                    } else {
-                        echo "No search results found";
-                    }
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo '<a href="productdetails.php?product_id=' . $row['product_id'] . '">' . $row['name'] . '</a><br>';
+        }
+    } else {
+        echo "No search results found";
+    }
 
-                    $stmt->close();
-                }
+    $stmt->close();
+}
+
                 ?>
             </section>
         </div>
