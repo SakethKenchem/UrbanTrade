@@ -20,19 +20,15 @@ $username = "root";
 $password = "";
 $dbname = "urbantrade"; 
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check the connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Assuming product_id is passed through GET method
 if(isset($_GET['product_id'])) {
     $product_id = $_GET['product_id'];
 
-    // Fetch the product data
     $sql = "SELECT * FROM products WHERE product_id = $product_id";
     $result = $conn->query($sql);
 

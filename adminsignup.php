@@ -7,10 +7,8 @@ $username = "root";
 $password = "";
 $dbname = "urbantrade";
 
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -21,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
     $email = $_POST['email'];
 
-    // Hash the password
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO admin (first_name, last_name, password, email) VALUES ('$firstname', '$lastname', '$hashed_password', '$email')";
