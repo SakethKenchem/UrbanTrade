@@ -106,9 +106,8 @@ if ($conn->connect_error) {
             </div>
         </div>
     </nav>
-    <?php
-
-
+    
+<?php
 if (isset($_GET['product_id'])) {
     $product_id = $_GET['product_id'];
     $sql = "SELECT p.*, s.seller_name FROM products p INNER JOIN sellers s ON p.seller_id = s.seller_id WHERE product_id = '$product_id'";
