@@ -78,10 +78,10 @@ if ($conn->connect_error) {
                     </ul>
                 </li>
             </ul>
-            <!-- Update your search form action -->
+            
             <form class="d-flex" action="productlists.php" method="get">
                 <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
-                <!-- ^ Add 'name="search"' to the input field to pass the search term -->
+              
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
             <section class="featured-products">

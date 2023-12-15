@@ -25,9 +25,7 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
     <title>Products - <?php echo $searchQuery; ?></title>
     <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <style>
-        /* Your CSS styles here */
-    </style>
+
 </head>
 
 <body>
@@ -61,12 +59,10 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
                 while ($row = $result->fetch_assoc()) {
             ?>
                     <div class="col-md-4 mb-4">
-                        <!-- Display product details -->
                         <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="img-fluid">
                         <h3><?php echo $row['name']; ?></h3>
                         <p>Price: $<?php echo $row['price']; ?></p>
                         <p>Category: <?php echo $row['category']; ?></p>
-                        <!-- View product details bootstrap button -->
                         <button type="button" class="btn btn-primary">
                             <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" style="color: white; text-decoration: none;">
                                 View Details

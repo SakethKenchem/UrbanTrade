@@ -120,7 +120,7 @@ if (!empty($searchQuery)) {
                     <a class="nav-link" href="productcategories.php">Product Categories</a>
                 </li>
             </ul>
-            <!-- Update your search form action -->
+            
             <form class="d-flex" action="productlists.php" method="GET">
     <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
     <button class="btn btn-outline-success" type="submit">Search</button>
@@ -237,10 +237,10 @@ $result = $conn->query($sql);
                 <h5><?php echo $row['name']; ?></h4>
                 <p style="font-size: small;"><b>Desc.: </b><?php echo $row['description']; ?></p>
                 <p><b>Price: </b>Ksh. <?php echo $row['price']; ?></p>
-                <!--seller name-->
+               
                 <p><b>Seller:</b> <?php echo $row['seller_name']; ?></p>
                 <button class="btn btn-primary">Add to Cart</button>
-                <!--view product details-->
+                
                 <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" class="btn btn-secondary">View Details</a>
             </div>
             <?php
