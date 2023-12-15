@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         }
     }
 }
-// Add code to delete a product
+// logic to delete a product
 if (isset($_GET['delete_product_id'])) {
     $product_id = $_GET['delete_product_id'];
     $sql = "DELETE FROM products WHERE product_id = '$product_id'";
@@ -58,7 +58,7 @@ if (isset($_GET['delete_product_id'])) {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-// Logic to handle search feature
+// logic to handle search feature
 if (isset($_GET['search'])) {
     $search = $_GET['search'];
     $seller_id = $_SESSION['seller_id'];
@@ -192,7 +192,7 @@ if (isset($_GET['search'])) {
 
 <div class="mt-5" id="MyProducts">
     <h2>My Products</h2>
-    <!--search bar to search for various parameters-->
+
     <form method="GET" action="sellerdashboard.php">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Search for products" aria-label="Search for products" aria-describedby="button-addon2" name="search">
@@ -212,7 +212,7 @@ if (isset($_GET['search'])) {
             echo "<div class='card-body'>";
             echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
             
-            $maxDescriptionLength = 120; // Set your desired maximum character limit
+            $maxDescriptionLength = 120; //(code to truncate description)
             $description = $product_row['description'];
             if (strlen($description) > $maxDescriptionLength) {
                 $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
@@ -239,9 +239,7 @@ if (isset($_GET['search'])) {
     ?>
 </div>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 
 </html>
