@@ -199,7 +199,7 @@ if (!isset($_SESSION['username'])) {
         </form>
     </div>
 </div>
-<!--purchse history-->
+
 <div class="card">
     <div class="card-header">
         <h5 id="purchasehistory">Purchase History</h5>
