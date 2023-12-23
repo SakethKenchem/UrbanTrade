@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2023 at 04:47 PM
+-- Generation Time: Dec 23, 2023 at 12:35 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,41 @@ SET time_zone = "+00:00";
 --
 -- Database: `urbantrade`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `adminid` int(11) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `password` varchar(200) NOT NULL,
+  `email` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`adminid`, `first_name`, `last_name`, `password`, `email`) VALUES
+(1, 'Saketh', 'Kenchem', '$2y$10$X/pkPvqyXVbB.4nRrxhxSu/1Lcq9lK5EUOwZbtOnwatzoYNX1KIG2', 's.kenchem@gmail.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `cart_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `added_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -43,7 +78,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `seller_id`, `name`, `description`, `price`, `category`, `image_url`, `created_at`) VALUES
-(1, 1, 'Horizon Forbidden West ps5 game', 'Horizon Forbidden West ps5 game', 5000.00, 'Video Games', 'productuploads/hfwps5.jpg', '2023-12-12 15:33:54');
+(1, 1, 'Horizon Forbidden West PS5 Game', 'Horizon Forbidden West PS5 Game', 5000.00, 'Video Games', 'productuploads/hfwps5.jpg', '2023-12-12 15:33:54'),
+(2, 2, 'Ramtons Wet and Dry Vacuum Cleaner', 'Clean up wet or dry messes with this Ramtons wet and dry vacuum. Easy to maneuver, this heavy-duty vacuum can tackle almost any mess. Perfect for vacuuming or cleaning up spills, it delivers powerful suction for quick and easy cleaning. With a 21-liter cleaning capacity, the vacuum is ideal for tough cleaning tasks and large spaces such as garages and workshops. The swiveling casters of this vacuum cleaner provide ease of movement in any direction. It features HEPA foam filter removal technology, allowing you to easily remove the filter without making contact with dirt.\r\n', 14200.00, 'Appliances', 'productuploads/ramtoms wet and dry.jpg', '2023-12-13 05:36:01');
 
 -- --------------------------------------------------------
 
@@ -66,7 +102,8 @@ CREATE TABLE `sellers` (
 --
 
 INSERT INTO `sellers` (`seller_id`, `seller_name`, `email`, `phone_number`, `address`, `password`, `created_at`) VALUES
-(1, 'SakethTech', 's.kenchem@gmail.com', '0112716955', '07, Jubilee Apartments', '$2y$10$haWZPDGLH1wjyu2s/IfUueLtRvMwyM1.SFtw06K1Gb1iiUtBBR4XK', '2023-12-12 11:46:57');
+(1, 'SakethTech', 's.kenchem@gmail.com', '0112716955', '07, Jubilee Apartments', '$2y$10$haWZPDGLH1wjyu2s/IfUueLtRvMwyM1.SFtw06K1Gb1iiUtBBR4XK', '2023-12-12 11:46:57'),
+(2, 'AwesomeHomeServices', 'sakethkenchem154@gmail.com', '0112716957', '012, Crest Apartments', '$2y$10$rWhbbzrU9RN8KXL5c49tvukG2Fk5rEwiKNsw7l.fvJ2cPxAPgNOSi', '2023-12-13 05:32:54');
 
 -- --------------------------------------------------------
 
@@ -96,6 +133,24 @@ INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phonenumber`, 
 --
 
 --
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`adminid`),
+  ADD UNIQUE KEY `first_name` (`first_name`),
+  ADD UNIQUE KEY `last_name` (`last_name`),
+  ADD UNIQUE KEY `password` (`password`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -121,16 +176,28 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `adminid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sellers`
 --
 ALTER TABLE `sellers`
-  MODIFY `seller_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `seller_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -141,6 +208,13 @@ ALTER TABLE `users`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`);
 
 --
 -- Constraints for table `products`
