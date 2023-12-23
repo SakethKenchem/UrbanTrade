@@ -100,7 +100,7 @@ if ($conn->connect_error) {
                             echo '<a href="productdetails.php?product_id=' . $row['product_id'] . '">' . $row['name'] . '</a><br>';
                         }
                     } else {
-                        echo "No search results found";
+                        echo "No search results found!";
                     }
 
                     $stmt->close();
