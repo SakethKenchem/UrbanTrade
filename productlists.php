@@ -20,8 +20,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
 <html lang="en">
     <style>
         img{
-            width: 100px;
-            height: 100px;
+            width: 130px;
+            height: 100%;
         }
         p{
             font-size: 15px;

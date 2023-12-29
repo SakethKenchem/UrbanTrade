@@ -20,14 +20,45 @@ if ($conn->connect_error) {
     <title>Product Categories</title>
     <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/12924a80c0.js" crossorigin="anonymous"></script>
     <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .navbar-brand {
+            font-weight: 600;
+            padding-left: 20px;
+        }
+        .navbar .navbar-brand img {
+            margin-right: 5px;
+        }
+        .navbar .navbar-nav li.nav-item {
+            margin-right: 10px;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link i {
+            margin-right: 5px;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link:hover i {
+            color: #2bbc8a;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link:hover {
+            color: #2bbc8a;
+        }
         .container {
             margin-top: 50px;
+
         }
         .card {
             margin-bottom: 20px;
-            margin-left: 20px;
-            width: 18rem;
+            width: 10pc;
         }
         .nav-link {
             color: black;
@@ -151,12 +182,14 @@ if ($conn->connect_error) {
                 $category = $categoryRow['category'];
                 $totalProducts = $categoryRow['total'];
         ?>
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-2">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo $category; ?></h5>
                             <p class="card-text">Total Products: <?php echo $totalProducts; ?></p>
-                            <a href="productlists.php?category=<?php echo urlencode($category); ?>" class="btn btn-primary">View Products</a>
+                            <a href="productlists.php?category=<?php echo urlencode($category); ?>" class="btn btn-primary">
+                            <i class="fa-solid fa-binoculars"></i>
+                        </a>
                         </div>
                     </div>
                 </div>

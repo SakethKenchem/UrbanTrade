@@ -30,6 +30,33 @@ if (!isset($_SESSION['username'])) {
         .container {
             margin-top: 50px;
         }
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        .navbar .navbar-brand {
+            font-weight: 600;
+            padding-left: 20px;
+        }
+        .navbar .navbar-brand img {
+            margin-right: 5px;
+        }
+        .navbar .navbar-nav li.nav-item {
+            margin-right: 10px;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link i {
+            margin-right: 5px;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link:hover i {
+            color: #2bbc8a;
+        }
+        .navbar .navbar-nav li.nav-item a.nav-link:hover {
+            color: #2bbc8a;
+        }
         .card {
             margin-bottom: 20px;
         }
