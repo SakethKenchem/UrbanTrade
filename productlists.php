@@ -18,7 +18,15 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
 
 <!DOCTYPE html>
 <html lang="en">
-
+    <style>
+        img{
+            width: 100px;
+            height: 100px;
+        }
+        p{
+            font-size: 15px;
+        }
+    </style>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,16 +66,14 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
             if ($result && $result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
             ?>
-                    <div class="col-md-4 mb-4">
-                        <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="img-fluid">
-                        <h3><?php echo $row['name']; ?></h3>
+                    <div class="col-md-4 mb-4" style="margin-top: 9px;">
+                    <!--make img clickable to product view of that product-->
+                    <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>">
+                        <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>">
+                    </a>
+                        <h3 style="font-size: 15px; margin-top: 5pp;"><?php echo $row['name']; ?></h3>
                         <p>Price: $<?php echo $row['price']; ?></p>
                         <p>Category: <?php echo $row['category']; ?></p>
-                        <button type="button" class="btn btn-primary">
-                            <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" style="color: white; text-decoration: none;">
-                                View Details
-                            </a>
-                        </button>
                     </div>
             <?php
                 }

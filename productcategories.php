@@ -26,6 +26,8 @@ if ($conn->connect_error) {
         }
         .card {
             margin-bottom: 20px;
+            margin-left: 20px;
+            width: 18rem;
         }
         .nav-link {
             color: black;
