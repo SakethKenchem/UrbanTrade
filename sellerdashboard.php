@@ -85,22 +85,39 @@ if (isset($_GET['search'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
     <style>
         body {
             background-color: #f8f9fa;
-            margin-bottom: 30px;
+            margin: 0;
         }
-        /*make my products cards much smaller*/
+       
         .productcard {
-            width: 200px;
-            height: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
-        .btn{
-            width: 70px;
-            font-size: smaller;
-            height: 25px;
+        
+        .productcard .card {
+            width: calc(20% - 10px);
+            margin-bottom: 10px;
         }
-
+        .productcard img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+        }
+        .productcard p {
+            font-size: 15px;
+        }
+        
+        .productcard .card .btn {
+        font-size: 14.5px; 
+        padding: 5px 8px; 
+        margin-right: 3px; 
+        margin-bottom: 3px; 
+        }
     </style>
 </head>
 <body>
@@ -220,9 +237,10 @@ if (isset($_GET['search'])) {
                 echo "<div class='card'>";
                 echo "<img src='" . $product_row['image_url'] . "' class='card-img-top' alt='Product Image'>";
                 echo "<div class='card-body'>";
-                echo "<h5 class='card-title' style='font-size: medium;'>" . $product_row['name'] . "</h5>";
+                echo "<b><h5 class='card-title' style='font-size: small;'> Name: </b>" . $product_row['name'] . "</h5>";
                 
-                $maxDescriptionLength = 120; //(code to truncate description)
+                echo "<b><p class='card-text' style='font-size: small;'> Date: </b>" . $product_row['created_at'] . "</p>";
+                /*$maxDescriptionLength = 90; //(code to truncate description)
                 $description = $product_row['description'];
                 if (strlen($description) > $maxDescriptionLength) {
                     $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
@@ -230,14 +248,16 @@ if (isset($_GET['search'])) {
                 } else {
                     echo "<p class='card-text'>" . $description . "</p>";
                 }
+                */
+                //product id
+                echo "<p class='card-text'> ID: " . $product_row['product_id'] . "</p>";
+               //echo "<p class='card-text'>" . $product_row['category'] . "</p>";
+               // echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
                 
-                echo "<p class='card-text'>" . $product_row['category'] . "</p>";
-                echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
-                echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary' style='margin-right: 5px; margin-bottom: 5px;'>View Details</a>";
-                echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'>Edit Product</a>";
-                
-                // button to delete the product with a confirmation dialog, logic to delete code is in this file
-                echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete Product</a>";
+            //buttons->
+            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary' style='margin-right: 5px; margin-bottom: 5px;'><i class='fas fa-eye'></i></a>";
+            echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'><i class='fas fa-edit'></i></a>";
+            echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'><i class='fas fa-trash-alt'></i></a>";
 
 
                 echo "</div></div>";

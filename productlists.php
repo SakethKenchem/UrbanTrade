@@ -70,10 +70,9 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
                     <!--make img clickable to product view of that product-->
                     <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>">
                         <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>">
-                    </a>
                         <h3 style="font-size: 15px; margin-top: 5pp;"><?php echo $row['name']; ?></h3>
-                        <p>Price: $<?php echo $row['price']; ?></p>
-                        <p>Category: <?php echo $row['category']; ?></p>
+                    </a>
+                        
                     </div>
             <?php
                 }

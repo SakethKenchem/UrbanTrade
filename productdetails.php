@@ -44,6 +44,12 @@ if ($conn->connect_error) {
         .account-cart svg {
             margin-left: 8px;
         }
+        /*make sure all the images are the same size*/
+        .img-fluid {
+            width: 100%px;
+            height: 250px;
+        }
+
 
     </style>
 </head>

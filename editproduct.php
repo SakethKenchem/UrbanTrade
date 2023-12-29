@@ -10,6 +10,11 @@
             background-color: #f8f9fa;
             margin-bottom: 50px;
         }
+        /*add a border aroiund the image and make space below it*/
+        img{
+            border: 2px solid black;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
