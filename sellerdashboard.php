@@ -90,7 +90,17 @@ if (isset($_GET['search'])) {
             background-color: #f8f9fa;
             margin-bottom: 30px;
         }
-        
+        /*make my products cards much smaller*/
+        .productcard {
+            width: 200px;
+            height: 100px;
+        }
+        .btn{
+            width: 70px;
+            font-size: smaller;
+            height: 25px;
+        }
+
     </style>
 </head>
 <body>
@@ -199,44 +209,45 @@ if (isset($_GET['search'])) {
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
         </div>
     </form>
+    <div class="productcard">    
+        <?php
+        $seller_id = $_SESSION['seller_id'];
+        $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
+        $products_result = $conn->query($products_sql);
 
-    <?php
-    $seller_id = $_SESSION['seller_id'];
-    $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
-    $products_result = $conn->query($products_sql);
+        if ($products_result->num_rows > 0) {
+            while ($product_row = $products_result->fetch_assoc()) {
+                echo "<div class='card'>";
+                echo "<img src='" . $product_row['image_url'] . "' class='card-img-top' alt='Product Image'>";
+                echo "<div class='card-body'>";
+                echo "<h5 class='card-title' style='font-size: medium;'>" . $product_row['name'] . "</h5>";
+                
+                $maxDescriptionLength = 120; //(code to truncate description)
+                $description = $product_row['description'];
+                if (strlen($description) > $maxDescriptionLength) {
+                    $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
+                    echo "<p class='card-text' style= 'font-size: medium;'>" . $truncatedDescription . "</p>";
+                } else {
+                    echo "<p class='card-text'>" . $description . "</p>";
+                }
+                
+                echo "<p class='card-text'>" . $product_row['category'] . "</p>";
+                echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
+                echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary' style='margin-right: 5px; margin-bottom: 5px;'>View Details</a>";
+                echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'>Edit Product</a>";
+                
+                // button to delete the product with a confirmation dialog, logic to delete code is in this file
+                echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete Product</a>";
 
-    if ($products_result->num_rows > 0) {
-        while ($product_row = $products_result->fetch_assoc()) {
-            echo "<div class='card' style='width: 18rem; display: inline-block; margin: 10px;'>";
-            echo "<img src='" . $product_row['image_url'] . "' class='card-img-top' alt='Product Image'>";
-            echo "<div class='card-body'>";
-            echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
-            
-            $maxDescriptionLength = 120; //(code to truncate description)
-            $description = $product_row['description'];
-            if (strlen($description) > $maxDescriptionLength) {
-                $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
-                echo "<p class='card-text'>" . $truncatedDescription . "</p>";
-            } else {
-                echo "<p class='card-text'>" . $description . "</p>";
+
+                echo "</div></div>";
             }
-            
-            echo "<p class='card-text'>" . $product_row['category'] . "</p>";
-            echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
-            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary' style='margin-right: 5px; margin-bottom: 5px;'>View Details</a>";
-            echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'>Edit Product</a>";
-            
-            // button to delete the product with a confirmation dialog, logic to delete code is in this file
-            echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'>Delete Product</a>";
-
-
-            echo "</div></div>";
+        } else {
+            echo "No products found.";
         }
-    } else {
-        echo "No products found.";
-    }
 
-    ?>
+        ?>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

@@ -101,10 +101,28 @@ if (!empty($searchQuery)) {
         display: block;
         margin-top: 5px;
     }
+    @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .ticker-text {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            animation: ticker linear infinite;
+        }
+        .ticker-text:hover {
+            animation-play-state: paused;
+        }
+        
     </style>
 </head>
 <body>
-<body>
+
+
+</header>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="homepage.php" style="margin-top: 4px;">
@@ -179,6 +197,7 @@ if (!empty($searchQuery)) {
     </div>
 </nav>
 
+<!-- Carousel -->
 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
@@ -256,5 +275,27 @@ $conn->close();
 ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.featured-product-card h5').each(function() {
+                let $h5 = $(this);
+                let originalText = $h5.text().trim();
+                let $tickerText = $h5.wrapInner('<span class="ticker-text"></span>').find('.ticker-text');
+
+                $tickerText.css('width', $tickerText.width()); // Ensure text doesn't break due to width change on hover
+
+                function startTicker() {
+                    $tickerText.css('animation-duration', ($tickerText.width() / 100) + 's');
+                }
+
+                function stopTicker() {
+                    $tickerText.css('animation-duration', '0s');
+                }
+
+                $h5.parent('.featured-product-card').hover(startTicker, stopTicker);
+            });
+        });
+    </script>
 </body>
 </html>
