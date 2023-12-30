@@ -43,109 +43,110 @@ if (!empty($searchQuery)) {
     <!--favicon-->
     <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <style>
-        body{
-            background-color: #f5f5f5;
-            margin-bottom: 100px;
-        }
-        .navbar {
-            background-color: #fff;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2px;
-        }
-        .navbar .navbar-brand {
-            font-weight: 600;
-            padding-left: 20px;
-        }
-        .navbar .navbar-brand img {
-            margin-right: 5px;
-        }
-        .navbar .navbar-nav li.nav-item {
-            margin-right: 10px;
-        }
-        .navbar .navbar-nav li.nav-item a.nav-link {
-            font-size: 16px;
-            font-weight: 500;
-        }
-        .navbar .navbar-nav li.nav-item a.nav-link i {
-            margin-right: 5px;
-        }
-        .navbar .navbar-nav li.nav-item a.nav-link:hover i {
-            color: #2bbc8a;
-        }
-        .navbar .navbar-nav li.nav-item a.nav-link:hover {
-            color: #2bbc8a;
-        }
-        .nav-link {
-            color: black;
-        }
-        .nav-item {
-            margin-right: 10px;
-        }
-        .search-bar {
-            width: 230px;
-            margin-left: 50px;
-        }
-        .account-cart {
-            display: flex;
-            align-items: center;
-        }
-        .account-cart svg {
-            margin-left: 8px;
-        }
+        <style>
+            body{
+                background-color: #f5f5f5;
+                margin-bottom: 100px;
+            }
+            .navbar {
+                background-color: #fff;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                margin-bottom: 2px;
+            }
+            .navbar .navbar-brand {
+                font-weight: 600;
+                padding-left: 20px;
+            }
+            .navbar .navbar-brand img {
+                margin-right: 5px;
+            }
+            .navbar .navbar-nav li.nav-item {
+                margin-right: 10px;
+            }
+            .navbar .navbar-nav li.nav-item a.nav-link {
+                font-size: 16px;
+                font-weight: 500;
+            }
+            .navbar .navbar-nav li.nav-item a.nav-link i {
+                margin-right: 5px;
+            }
+            .navbar .navbar-nav li.nav-item a.nav-link:hover i {
+                color: #2bbc8a;
+            }
+            .navbar .navbar-nav li.nav-item a.nav-link:hover {
+                color: #2bbc8a;
+            }
+            .nav-link {
+                color: black;
+            }
+            .nav-item {
+                margin-right: 10px;
+            }
+            .search-bar {
+                width: 230px;
+                margin-left: 50px;
+            }
+            .account-cart {
+                display: flex;
+                align-items: center;
+            }
+            .account-cart svg {
+                margin-left: 8px;
+            }
 
-        .featured-products {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: left;
-            margin: 20px 0;
-        }
+            .featured-products {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: left;
+                margin: 20px 0;
+            }
 
-    .featured-product-card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 10px;
-        width: 320px; 
-        margin: 10px;
-        text-align: center;
-        overflow: hidden; 
-        text-overflow: ellipsis; 
-        white-space: nowrap; 
-    }
-    .featured-product-card:hover {
-        border-color: #999;
-        box-shadow: 0 0 10px #999;
-        transform: scale(1.03);
+            .featured-product-card {
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 10px;
+                width: 300px; 
+                margin: 10px;
+                text-align: center;
+                overflow: hidden; 
+                text-overflow: ellipsis; 
+                white-space: nowrap; 
+            }
+            .featured-product-card:hover {
+                border-color: #999;
+                box-shadow: 0 0 10px #999;
+                transform: scale(1.03);
 
-    }
-    .featured-product-img {
-        max-width: 100%;
-        height: px;
-    }
-    .featured-product-card .btn-secondary {
-        display: none;
-    }
-    .featured-product-card:hover .btn-secondary {
-        display: block;
-        margin-top: 5px;
-    }
-    @keyframes ticker {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
+            }
+            .featured-product-img {
+                max-width: 100%;
+                height: 120px;
+                overflow: hidden;
+            }
+            .featured-product-card .btn-secondary {
+                display: none;
+            }
+            .featured-product-card:hover .btn-secondary {
+                display: block;
+                margin-top: 5px;
+            }
+            @keyframes ticker {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-100%); }
+                }
 
-        .ticker-text {
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-            position: relative;
-            animation: ticker linear infinite;
-        }
-        .ticker-text:hover {
-            animation-play-state: paused;
-        }
-        
-    </style>
+                .ticker-text {
+                    display: inline-block;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    position: relative;
+                    animation: ticker linear infinite;
+                }
+                .ticker-text:hover {
+                    animation-play-state: paused;
+                }
+                
+        </style>
 </head>
 <body>
 

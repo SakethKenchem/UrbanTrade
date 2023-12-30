@@ -10,42 +10,49 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-//make sure no one can access this page without logging in
+// Make sure no one can access this page without logging in
 if (!isset($_SESSION['seller_id'])) {
     header("Location: sellerlogin.php");
 }
 
-
+// Handle form submission for adding a product with multiple images
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
     $name = $_POST['name'];
-    //seller name
     $seller_name = $_SESSION['seller_name'];
     $description = $_POST['description'];
     $category = $_POST['category'];
     $price = $_POST['price'];
     $seller_id = $_SESSION['seller_id'];
 
+    // Insert product details into products table
+    $sql = "INSERT INTO products (seller_id, name, description, price, category) VALUES ('$seller_id', '$name', '$description', '$price', '$category')";
+    if ($conn->query($sql) === TRUE) {
+        $product_id = $conn->insert_id; // Get the ID of the newly inserted product
 
-    $target_dir = "productuploads/";
-    $target_file = $target_dir . basename($_FILES["image"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        // Loop through uploaded images and insert their URLs into product_images table
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+            $image_name = $_FILES['images']['name'][$key];
+            $image_tmp = $_FILES['images']['tmp_name'][$key];
 
+            $target_dir = "productuploads/";
+            $target_file = $target_dir . basename($image_name);
 
-    if ($uploadOk == 0) {
-        echo "Sorry, your file was not uploaded.";
-    } else {
-        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-            $image_url = $target_file;
-            $sql = "INSERT INTO products (seller_id, name, description, price, category, image_url) VALUES ('$seller_id', '$name', '$description', '$price', '$category','$image_url')";
-            if ($conn->query($sql) === TRUE) {
-                echo "Product added successfully!";
+            // Move uploaded file to target directory
+            if (move_uploaded_file($image_tmp, $target_file)) {
+                $image_url = $target_file;
+
+                // Insert image URL into product_images table
+                $sql = "INSERT INTO product_images (product_id, image_url) VALUES ('$product_id', '$image_url')";
+                if ($conn->query($sql) !== TRUE) {
+                    echo "Error inserting image: " . $conn->error;
+                }
             } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
+                echo "Failed to upload $image_name.";
             }
-        } else {
-            echo "Sorry, there was an error uploading your file.";
         }
+        echo "Product added successfully!";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
 // logic to delete a product
@@ -87,38 +94,29 @@ if (isset($_GET['search'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-    <style>
-        body {
-            background-color: #f8f9fa;
-            margin: 0;
-        }
-       
-        .productcard {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-        
-        .productcard .card {
-            width: calc(20% - 10px);
-            margin-bottom: 10px;
-        }
-        .productcard img {
-            width: 100%;
-            height: 110px;
-            object-fit: cover;
-        }
-        .productcard p {
-            font-size: 15px;
-        }
-        
-        .productcard .card .btn {
-        font-size: 14.5px; 
-        padding: 5px 8px; 
-        margin-right: 3px; 
-        margin-bottom: 3px; 
-        }
-    </style>
+<style>
+    body {
+        background-color: #f8f9fa;
+        margin: 0;
+    }
+    .product-card {
+        width: 100px; /* Adjust this value to make the cards smaller */
+        margin-right: 1%; /* Add some spacing between cards */
+    }
+
+    /* Clear the margin for the last card in a row */
+    .product-card:last-child {
+        margin-right: 0;
+    }
+    .carousel-item img {
+        max-width: 120px;
+        height: 200px; /* Adjust this value to set the desired smaller height */
+        object-fit: cover;
+    }
+</style>
+
+
+
 </head>
 <body>
 
@@ -211,7 +209,7 @@ if (isset($_GET['search'])) {
         </div>
         <div class="mb-3">
             <label for="productImage" class="form-label">Image</label>
-            <input type="file" class="form-control" id="productImage" name="image">
+            <input type="file" class="form-control" id="productImage" name="images[]" multiple>
         </div>
         <button type="submit" name="submit" class="btn btn-primary">Add Product</button>
     </form>
@@ -227,46 +225,61 @@ if (isset($_GET['search'])) {
         </div>
     </form>
     <div class="productcard">    
-        <?php
-        $seller_id = $_SESSION['seller_id'];
-        $products_sql = "SELECT * FROM products WHERE seller_id = '$seller_id'";
-        $products_result = $conn->query($products_sql);
+    <?php
+// ... (existing PHP code remains unchanged)
 
-        if ($products_result->num_rows > 0) {
-            while ($product_row = $products_result->fetch_assoc()) {
-                echo "<div class='card'>";
-                echo "<img src='" . $product_row['image_url'] . "' class='card-img-top' alt='Product Image'>";
-                echo "<div class='card-body'>";
-                echo "<b><h5 class='card-title' style='font-size: small;'> Name: </b>" . $product_row['name'] . "</h5>";
-                
-                echo "<b><p class='card-text' style='font-size: small;'> Date: </b>" . $product_row['created_at'] . "</p>";
-                /*$maxDescriptionLength = 90; //(code to truncate description)
-                $description = $product_row['description'];
-                if (strlen($description) > $maxDescriptionLength) {
-                    $truncatedDescription = substr($description, 0, $maxDescriptionLength) . '...';
-                    echo "<p class='card-text' style= 'font-size: medium;'>" . $truncatedDescription . "</p>";
-                } else {
-                    echo "<p class='card-text'>" . $description . "</p>";
-                }
-                */
-                //product id
-                echo "<p class='card-text'> ID: " . $product_row['product_id'] . "</p>";
-               //echo "<p class='card-text'>" . $product_row['category'] . "</p>";
-               // echo "<p class='card-text'>Ksh. " . $product_row['price'] . "</p>";
-                
-            //buttons->
-            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary' style='margin-right: 5px; margin-bottom: 5px;'><i class='fas fa-eye'></i></a>";
-            echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'><i class='fas fa-edit'></i></a>";
-            echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger' onclick='return confirm(\"Are you sure you want to delete this product?\")'><i class='fas fa-trash-alt'></i></a>";
+if ($products_result->num_rows > 0) {
+    while ($product_row = $products_result->fetch_assoc()) {
+        echo "<div class='card mb-3'>";
+        echo "<div class='card-body'>";
+        echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
+        echo "<p class='card-text'>" . $product_row['description'] . "</p>";
+        echo "<p class='card-text'><small class='text-muted'>Date: " . $product_row['created_at'] . "</small></p>";
 
+        // Carousel for multiple images within the same card
+        echo "<div id='productCarousel{$product_row['product_id']}' class='carousel slide' data-bs-ride='carousel'>";
+        echo '<div class="carousel-inner">';
+        $firstImage = true;
 
-                echo "</div></div>";
-            }
-        } else {
-            echo "No products found.";
+        // Fetch and display images within the carousel
+        $images_sql = "SELECT image_url FROM product_images WHERE product_id = '{$product_row['product_id']}'";
+        $images_result = $conn->query($images_sql);
+
+        while ($image_row = $images_result->fetch_assoc()) {
+            $activeClass = $firstImage ? 'active' : ''; // Set the active class for the first image
+            echo "<div class='carousel-item $activeClass'>";
+            echo "<img src='" . $image_row['image_url'] . "' class='d-block w-100' alt='Product Image'>";
+            echo "</div>";
+            $firstImage = false;
         }
 
-        ?>
+        echo '</div>';
+        echo '<button class="carousel-control-prev" type="button" data-bs-target="#productCarousel' . $product_row['product_id'] . '" data-bs-slide="prev">';
+        echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+        echo '<span class="visually-hidden">Previous</span>';
+        echo '</button>';
+        echo '<button class="carousel-control-next" type="button" data-bs-target="#productCarousel' . $product_row['product_id'] . '" data-bs-slide="next">';
+        echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+        echo '<span class="visually-hidden">Next</span>';
+        echo '</button>';
+        echo "</div>";
+
+        // View and Edit buttons
+        echo '<div class="btn-group">';
+        echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary'><i class='fas fa-eye'></i> View</a>";
+        echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'><i class='fas fa-edit'></i> Edit</a>";
+        echo "</div>";
+
+        echo "</div></div>";
+    }
+} else {
+    echo "<div class='alert alert-info' role='alert'>No products found.</div>";
+}
+?>
+
+
+
+
     </div>
 </div>
 
