@@ -45,19 +45,21 @@ $category = isset($_GET['category']) ? $_GET['category'] : '';
         <h2>Results for <?php echo $searchQuery; ?></h2>
         <h2>Results for <?php echo $category; ?></h2>
 
-        <div class="row">
-            <?php
-            $query = "SELECT * FROM products";
+    <div class="row">
+        <?php
+            $query = "SELECT p.product_id, p.name, pi.image_url
+                        FROM products p
+                        INNER JOIN product_images pi ON p.product_id = pi.product_id";
 
             if (!empty($searchQuery)) {
-                $query .= " WHERE name LIKE '%$searchQuery%'";
+                $query .= " WHERE p.name LIKE '%$searchQuery%'";
             }
 
             if (!empty($category)) {
                 if (strpos($query, 'WHERE') === false) {
-                    $query .= " WHERE category = '$category'";
+                    $query .= " WHERE p.category = '$category'";
                 } else {
-                    $query .= " AND category = '$category'";
+                    $query .= " AND p.category = '$category'";
                 }
             }
 

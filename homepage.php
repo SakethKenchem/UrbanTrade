@@ -266,7 +266,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT p.*, s.seller_name FROM products p INNER JOIN sellers s ON p.seller_id = s.seller_id LIMIT 5"; // Assuming you want to display 2 featured products
+$sql = "SELECT p.*, pi.image_url AS product_image FROM products p 
+LEFT JOIN product_images pi ON p.product_id = pi.product_id 
+INNER JOIN sellers s ON p.seller_id = s.seller_id LIMIT 5"; 
 $result = $conn->query($sql);
 
 ?>
@@ -281,15 +283,17 @@ $result = $conn->query($sql);
         while ($row = $result->fetch_assoc()) {
             ?>
             <div class="featured-product-card">
-                <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="featured-product-img">
+            <img src="<?php echo $row['product_image']; ?>" alt="<?php echo $row['name']; ?>" class="featured-product-img">
                 <h5><?php echo $row['name']; ?></h4>
-                <p style="font-size: small;"><b>Desc.: </b><?php echo $row['description']; ?></p>
+                <p style="font-size: small;"><b>Desc.: </b><?php echo strlen($row['description']) > 35 ? substr($row['description'], 0, 25) . '...' : $row['description']; ?></p>
                 <p><b>Price: </b>Ksh. <?php echo $row['price']; ?></p>
                
                 <p><b>Seller:</b> <?php echo $row['seller_name']; ?></p>
-                <button class="btn btn-primary">Add to Cart</button>
+
+                <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" class="btn btn-primary">View Details</a>
+
+                <button class="btn btn-secondary" style="margin-left: 85px;">Add to Cart</button>
                 
-                <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" class="btn btn-secondary">View Details</a>
             </div>
             <?php
         }
