@@ -116,15 +116,19 @@ if ($conn->connect_error) {
 <?php
 if (isset($_GET['product_id'])) {
     $product_id = $_GET['product_id'];
-    $sql = "SELECT p.*, s.seller_name FROM products p INNER JOIN sellers s ON p.seller_id = s.seller_id WHERE product_id = '$product_id'";
+    $sql = "SELECT p.*, pi.image_url AS image, s.seller_name FROM products p 
+            INNER JOIN product_images pi ON p.product_id = pi.product_id 
+            INNER JOIN sellers s ON p.seller_id = s.seller_id 
+            WHERE p.product_id = '$product_id'";
     $result = $conn->query($sql);
+
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         ?>
         <div class="container mt-5">
             <div class="row">
                 <div class="col-md-6">
-                    <img src="<?php echo $row['image_url']; ?>" alt="<?php echo $row['name']; ?>" class="img-fluid">
+                    <img src="<?php echo $row['image']; ?>" alt="<?php echo $row['name']; ?>" class="img-fluid">
                 </div>
                 <div class="col-md-6">
                     <h2><?php echo $row['name']; ?></h2>
@@ -133,10 +137,11 @@ if (isset($_GET['product_id'])) {
                     <p><b>Description: </b><?php echo $row['description']; ?></p>
                     <p><b>Seller: </b><?php echo $row['seller_name']; ?></p>
                     <button class="btn btn-primary">Add to Cart</button>
-                    
-                    <div style="margin-top: 5px;"><a href="homepage.php">
-                    <button class="btn btn-success">Back</button>
-                    </a></div>
+                    <div style="margin-top: 5px;">
+                        <a href="homepage.php">
+                            <button class="btn btn-success">Back</button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,6 +150,7 @@ if (isset($_GET['product_id'])) {
         echo "No product found";
     }
 }
+
 ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>

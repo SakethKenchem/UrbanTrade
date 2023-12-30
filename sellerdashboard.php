@@ -60,7 +60,10 @@ if (isset($_GET['delete_product_id'])) {
     $product_id = $_GET['delete_product_id'];
     $sql = "DELETE FROM products WHERE product_id = '$product_id'";
     if ($conn->query($sql) === TRUE) {
-        echo "Product deleted successfully!";
+        //javascript alert confirmation to delete product
+        echo "<script>alert('Product deleted successfully!');</script>";
+        header("Location: sellerdashboard.php");
+        
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
@@ -76,7 +79,7 @@ if (isset($_GET['search'])) {
     $products_result = $stmt->get_result();
 
     if ($products_result->num_rows === 0) {
-        echo "<div class='alert alert-info' role='alert'>No products found.</div>";
+        
     }
 } else {
     $seller_id = $_SESSION['seller_id'];
@@ -94,28 +97,13 @@ if (isset($_GET['search'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-<style>
-    body {
-        background-color: #f8f9fa;
-        margin: 0;
-    }
-    .product-card {
-        width: 100px; /* Adjust this value to make the cards smaller */
-        margin-right: 1%; /* Add some spacing between cards */
-    }
-
-    /* Clear the margin for the last card in a row */
-    .product-card:last-child {
-        margin-right: 0;
-    }
-    .carousel-item img {
-        max-width: 120px;
-        height: 200px; /* Adjust this value to set the desired smaller height */
-        object-fit: cover;
-    }
-</style>
-
-
+    <style>
+        .card .btn{
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            margin: 0.3rem;
+        }
+    </style>
 
 </head>
 <body>
@@ -224,64 +212,64 @@ if (isset($_GET['search'])) {
             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
         </div>
     </form>
-    <div class="productcard">    
+
+    <div class="row row-cols-1 row-cols-md-4 g-4">
     <?php
-// ... (existing PHP code remains unchanged)
+    if ($products_result->num_rows > 0) {
+        while ($product_row = $products_result->fetch_assoc()) {
+            echo "<div class='col'>";
+            echo "<div class='card h-90'>"; // Set a fixed height for cards in each column
+            echo "<div class='card-body'>";
+            // Carousel for multiple images within the same card
+            echo "<div id='productCarousel{$product_row['product_id']}' class='carousel slide' data-bs-ride='carousel'>";
+            echo '<div class="carousel-inner">';
+            $firstImage = true;
 
-if ($products_result->num_rows > 0) {
-    while ($product_row = $products_result->fetch_assoc()) {
-        echo "<div class='card mb-3'>";
-        echo "<div class='card-body'>";
-        echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
-        echo "<p class='card-text'>" . $product_row['description'] . "</p>";
-        echo "<p class='card-text'><small class='text-muted'>Date: " . $product_row['created_at'] . "</small></p>";
+            // Fetch and display images within the carousel
+            $images_sql = "SELECT image_url FROM product_images WHERE product_id = '{$product_row['product_id']}'";
+            $images_result = $conn->query($images_sql);
 
-        // Carousel for multiple images within the same card
-        echo "<div id='productCarousel{$product_row['product_id']}' class='carousel slide' data-bs-ride='carousel'>";
-        echo '<div class="carousel-inner">';
-        $firstImage = true;
+            while ($image_row = $images_result->fetch_assoc()) {
+                $activeClass = $firstImage ? 'active' : ''; // Set the active class for the first image
+                echo "<div class='carousel-item $activeClass'>";
+                echo "<img src='" . $image_row['image_url'] . "' class='d-block w-100' style='height: 250px; object-fit: cover;' alt='Product Image'>";
+                echo "</div>";
+                $firstImage = false;
+            }
 
-        // Fetch and display images within the carousel
-        $images_sql = "SELECT image_url FROM product_images WHERE product_id = '{$product_row['product_id']}'";
-        $images_result = $conn->query($images_sql);
-
-        while ($image_row = $images_result->fetch_assoc()) {
-            $activeClass = $firstImage ? 'active' : ''; // Set the active class for the first image
-            echo "<div class='carousel-item $activeClass'>";
-            echo "<img src='" . $image_row['image_url'] . "' class='d-block w-100' alt='Product Image'>";
+            echo '</div>';
+            echo '<button class="carousel-control-prev" type="button" data-bs-target="#productCarousel' . $product_row['product_id'] . '" data-bs-slide="prev">';
+            echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
+            echo '<span class="visually-hidden">Previous</span>';
+            echo '</button>';
+            echo '<button class="carousel-control-next" type="button" data-bs-target="#productCarousel' . $product_row['product_id'] . '" data-bs-slide="next">';
+            echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
+            echo '<span class="visually-hidden">Next</span>';
+            echo '</button>';
             echo "</div>";
-            $firstImage = false;
+
+            echo "<h5 class='card-title'>" . $product_row['name'] . "</h5>";
+            echo "<p class='card-text'>" . substr($product_row['description'], 0, 45) . (strlen($product_row['description']) > 45 ? '...' : '') . "</p>";
+            // id of product
+            echo "<p class='card-text'><small class='text-muted'>Product ID: " . $product_row['product_id'] . "</small></p>";
+            echo "<p class='card-text'><small class='text-muted'>Date: " . $product_row['created_at'] . "</small></p>";
+
+            // View, Edit, and Delete buttons
+            echo '<div class="btn-group">';
+            echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary'><i class='fas fa-eye'></i></a>";
+            echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'><i class='fas fa-edit'></i></a>";
+            echo "<a href='sellerdashboard.php?delete_product_id=" . $product_row['product_id'] . "' class='btn btn-danger'><i class='fas fa-trash'></i></a>";
+            echo "</div>";
+
+            echo "</div></div>";
+            echo "</div>";
         }
-
-        echo '</div>';
-        echo '<button class="carousel-control-prev" type="button" data-bs-target="#productCarousel' . $product_row['product_id'] . '" data-bs-slide="prev">';
-        echo '<span class="carousel-control-prev-icon" aria-hidden="true"></span>';
-        echo '<span class="visually-hidden">Previous</span>';
-        echo '</button>';
-        echo '<button class="carousel-control-next" type="button" data-bs-target="#productCarousel' . $product_row['product_id'] . '" data-bs-slide="next">';
-        echo '<span class="carousel-control-next-icon" aria-hidden="true"></span>';
-        echo '<span class="visually-hidden">Next</span>';
-        echo '</button>';
-        echo "</div>";
-
-        // View and Edit buttons
-        echo '<div class="btn-group">';
-        echo "<a href='productdetails.php?product_id=" . $product_row['product_id'] . "' class='btn btn-primary'><i class='fas fa-eye'></i> View</a>";
-        echo "<a href='editproduct.php?product_id=" . $product_row['product_id'] . "' class='btn btn-secondary'><i class='fas fa-edit'></i> Edit</a>";
-        echo "</div>";
-
-        echo "</div></div>";
+    } else {
+        echo "<div class='alert alert-info' role='alert'>No products found.</div>";
     }
-} else {
-    echo "<div class='alert alert-info' role='alert'>No products found.</div>";
-}
-?>
-
-
-
-
-    </div>
+    ?>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>

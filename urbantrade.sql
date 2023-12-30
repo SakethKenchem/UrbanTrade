@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 23, 2023 at 12:35 PM
+-- Generation Time: Dec 30, 2023 at 01:41 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -78,8 +78,26 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `seller_id`, `name`, `description`, `price`, `category`, `image_url`, `created_at`) VALUES
-(1, 1, 'Horizon Forbidden West PS5 Game', 'Horizon Forbidden West PS5 Game', 5000.00, 'Video Games', 'productuploads/hfwps5.jpg', '2023-12-12 15:33:54'),
-(2, 2, 'Ramtons Wet and Dry Vacuum Cleaner', 'Clean up wet or dry messes with this Ramtons wet and dry vacuum. Easy to maneuver, this heavy-duty vacuum can tackle almost any mess. Perfect for vacuuming or cleaning up spills, it delivers powerful suction for quick and easy cleaning. With a 21-liter cleaning capacity, the vacuum is ideal for tough cleaning tasks and large spaces such as garages and workshops. The swiveling casters of this vacuum cleaner provide ease of movement in any direction. It features HEPA foam filter removal technology, allowing you to easily remove the filter without making contact with dirt.\r\n', 14200.00, 'Appliances', 'productuploads/ramtoms wet and dry.jpg', '2023-12-13 05:36:01');
+(7, 1, 'Von VSMS03PLX Stand Mixer 4L, 300W - Stainless Steel', 'Stand Mixer\nBlack\n4L Stainless Steel Bowl with base\nAuto-Rotating Bowl\nEffortless hands free preparation\nPowerful 300W Motor\n5 Speed Control\nTurbo function with safety device\nEject Button for easy assembly\n2 Pairs of Stainless Steel beaters and dough hooks\n100% Copper Motor', 3495.00, 'Books', NULL, '2023-12-30 12:34:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_images`
+--
+
+CREATE TABLE `product_images` (
+  `image_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `image_url` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_images`
+--
+
+INSERT INTO `product_images` (`image_id`, `product_id`, `image_url`) VALUES
+(11, 7, 'productuploads/broken pipe.jpg');
 
 -- --------------------------------------------------------
 
@@ -158,6 +176,13 @@ ALTER TABLE `products`
   ADD KEY `seller_id` (`seller_id`);
 
 --
+-- Indexes for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD PRIMARY KEY (`image_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
 -- Indexes for table `sellers`
 --
 ALTER TABLE `sellers`
@@ -191,7 +216,13 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `product_images`
+--
+ALTER TABLE `product_images`
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `sellers`
@@ -221,6 +252,12 @@ ALTER TABLE `cart`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`seller_id`) REFERENCES `sellers` (`seller_id`);
+
+--
+-- Constraints for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
