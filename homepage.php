@@ -151,7 +151,6 @@ if (!empty($searchQuery)) {
 <body>
 
 
-</header>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="homepage.php" style="margin-top: 4px;">
@@ -169,33 +168,31 @@ if (!empty($searchQuery)) {
             </ul>
             
             <form class="d-flex" action="productlists.php" method="GET">
-    <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
-    <button class="btn btn-outline-success" type="submit">Search</button>
-</form>
-
+                <input class="form-control me-2 search-bar" type="search" placeholder="Search" aria-label="Search" name="search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
 
             <section class="featured-products">
                 <?php
-$searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+                    $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
 
-if (!empty($searchQuery)) {
-    $stmt = $conn->prepare("SELECT p.product_id, p.name FROM products p WHERE p.name LIKE ?");
-    $searchParam = "%{$searchQuery}%";
-    $stmt->bind_param("s", $searchParam);
-    $stmt->execute();
-    $result = $stmt->get_result();
+                    if (!empty($searchQuery)) {
+                        $stmt = $conn->prepare("SELECT p.product_id, p.name FROM products p WHERE p.name LIKE ?");
+                        $searchParam = "%{$searchQuery}%";
+                        $stmt->bind_param("s", $searchParam);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
-            echo '<a href="productdetails.php?product_id=' . $row['product_id'] . '">' . $row['name'] . '</a><br>';
-        }
-    } else {
-        echo "No search results found";
-    }
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo '<a href="productdetails.php?product_id=' . $row['product_id'] . '">' . $row['name'] . '</a><br>';
+                            }
+                        } else {
+                            echo "No search results found";
+                        }
 
-    $stmt->close();
-}
-
+                        $stmt->close();
+                    }
                 ?>
             </section>
         </div>
@@ -225,6 +222,7 @@ if (!empty($searchQuery)) {
         </ul>
     </div>
 </nav>
+
 
 <!-- Carousel -->
 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
@@ -274,32 +272,76 @@ $result = $conn->query($sql);
 ?>
 <div style="margin-left: 30px; margin-top: 10px;">
     <h2>Featured Products</h2>
-</div>   
+</div>  
+
 <section class="featured-products">
-
-
     <?php
-    if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
+
+$sql = "SELECT p.product_id, p.name, p.description, p.price, s.seller_name, pi.image_url AS product_image FROM products p 
+LEFT JOIN product_images pi ON p.product_id = pi.product_id 
+INNER JOIN sellers s ON p.seller_id = s.seller_id LIMIT 5";
+$result = $conn->query($sql);
+
+$displayedProducts = []; // Keep track of displayed product IDs
+
+if ($result->num_rows > 0) {
+while ($row = $result->fetch_assoc()) {
+$product_id = $row['product_id'];
+
+// Check if the product has already been displayed
+if (!in_array($product_id, $displayedProducts)) {
+    $displayedProducts[] = $product_id; // Add product ID to displayed list
+
+    ?>
+    <div class="featured-product-card">
+        <?php
+        // Image carousel
+        $image_sql = "SELECT image_url FROM product_images WHERE product_id = $product_id";
+        $image_result = $conn->query($image_sql);
+
+        if ($image_result->num_rows > 0) {
             ?>
-            <div class="featured-product-card">
-            <img src="<?php echo $row['product_image']; ?>" alt="<?php echo $row['name']; ?>" class="featured-product-img">
-                <h5><?php echo $row['name']; ?></h4>
-                <p style="font-size: small;"><b>Desc.: </b><?php echo strlen($row['description']) > 35 ? substr($row['description'], 0, 25) . '...' : $row['description']; ?></p>
-                <p><b>Price: </b>Ksh. <?php echo $row['price']; ?></p>
-               
-                <p><b>Seller:</b> <?php echo $row['seller_name']; ?></p>
-
-                <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" class="btn btn-primary">View Details</a>
-
-                <button class="btn btn-secondary" style="margin-left: 85px;">Add to Cart</button>
-                
+            <div id="carousel_<?php echo $product_id; ?>" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <?php
+                    $count = 0;
+                    while ($image_row = $image_result->fetch_assoc()) {
+                        $active_class = ($count == 0) ? 'active' : '';
+                        ?>
+                        <div class="carousel-item <?php echo $active_class; ?>">
+                            <img src="<?php echo $image_row['image_url']; ?>" class="d-block w-100" alt="Product Image">
+                        </div>
+                        <?php
+                        $count++;
+                    }
+                    ?>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel_<?php echo $product_id; ?>" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel_<?php echo $product_id; ?>" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
             <?php
         }
-    } else {
-        echo "No featured products available";
-    }
+
+        ?>
+        <h5><?php echo $row['name']; ?></h5>
+        <p style="font-size: small;"><b>Desc.: </b><?php echo strlen($row['description']) > 35 ? substr($row['description'], 0, 25) . '...' : $row['description']; ?></p>
+        <p><b>Price: </b>Ksh. <?php echo $row['price']; ?></p>
+        <p><b>Seller:</b> <?php echo $row['seller_name']; ?></p>
+        <a href="productdetails.php?product_id=<?php echo $row['product_id']; ?>" class="btn btn-primary">View Details</a>
+        <button class="btn btn-secondary" style="margin-left: 85px;">Add to Cart</button>
+    </div>
+    <?php
+}
+}
+} else {
+echo "No featured products available";
+}
     ?>
 </section>
 
