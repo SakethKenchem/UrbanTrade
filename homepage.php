@@ -33,7 +33,6 @@ if (!empty($searchQuery)) {
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
