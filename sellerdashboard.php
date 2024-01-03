@@ -111,7 +111,7 @@ if (isset($_GET['search'])) {
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="sellerdashboard.php">
-            <img img src="Urban Trade KE logo.jpeg" alt="Urban Trade Logo" height="40" width="40" class="d-inline-block align-text-top me-2">    
+            <img img src="images/Urban Trade KE logo.jpeg" alt="Urban Trade Logo" height="40" width="40" class="d-inline-block align-text-top me-2">    
     
             Urban Trade KE Seller Dashboard
             </a>

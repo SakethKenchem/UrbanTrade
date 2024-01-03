@@ -40,7 +40,7 @@ if (!empty($searchQuery)) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
     <!--favicon-->
-    <link rel="icon" href="Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
+    <link rel="icon" href="images/Urban Trade KE logo.jpeg" type="image/gif" sizes="16x16">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
         <style>
             body{
@@ -153,7 +153,7 @@ if (!empty($searchQuery)) {
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="homepage.php" style="margin-top: 4px;">
-            <img src="Urban Trade KE logo.jpeg" alt="Urban Trade Logo" height="40" width="40" class="d-inline-block align-text-top me-2">
+            <img src="images/Urban Trade KE logo.jpeg" alt="Urban Trade Logo" height="40" width="40" class="d-inline-block align-text-top me-2">
             Urban Trade KE
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -227,19 +227,19 @@ if (!empty($searchQuery)) {
 <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="onlineshopping.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
+      <img src="images/onlineshopping.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
     </div>
     <div class="carousel-item">
-      <img src="s23.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
+      <img src="images/s23.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
     </div>
     <div class="carousel-item">
-      <img src="flashsales.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
+      <img src="images/flashsales.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
     </div>
     <div class="carousel-item">
-      <img src="lg.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
+      <img src="images/lg.jpg" class="d-block w-100" alt="..." style="width: 400px; height:480px;">
     </div>
     <div class="carousel-item">
-      <img src="lgmonitor.webp" class="d-block w-100" alt="..." style="width: 400px; height:450px;">
+      <img src="images/lgmonitor.webp" class="d-block w-100" alt="..." style="width: 400px; height:450px;">
     </div>
   </div>
   <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
