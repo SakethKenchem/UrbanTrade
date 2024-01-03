@@ -281,15 +281,14 @@ LEFT JOIN product_images pi ON p.product_id = pi.product_id
 INNER JOIN sellers s ON p.seller_id = s.seller_id LIMIT 5";
 $result = $conn->query($sql);
 
-$displayedProducts = []; // Keep track of displayed product IDs
+$displayedProducts = []; 
 
 if ($result->num_rows > 0) {
 while ($row = $result->fetch_assoc()) {
 $product_id = $row['product_id'];
 
-// Check if the product has already been displayed
 if (!in_array($product_id, $displayedProducts)) {
-    $displayedProducts[] = $product_id; // Add product ID to displayed list
+    $displayedProducts[] = $product_id; 
 
     ?>
     <div class="featured-product-card">

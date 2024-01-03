@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (password_verify($password, $stored_password)) {
             $_SESSION['seller_id'] = $row['seller_id'];
-            $_SESSION['seller_name'] = $row['seller_name']; // Adding seller_name to session
+            $_SESSION['seller_name'] = $row['seller_name']; 
             header("Location: sellerdashboard.php");
             exit();
         } else {
