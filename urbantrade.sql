@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 30, 2023 at 01:41 PM
+-- Generation Time: Jan 03, 2024 at 08:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -78,7 +78,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`product_id`, `seller_id`, `name`, `description`, `price`, `category`, `image_url`, `created_at`) VALUES
-(7, 1, 'Von VSMS03PLX Stand Mixer 4L, 300W - Stainless Steel', 'Stand Mixer\nBlack\n4L Stainless Steel Bowl with base\nAuto-Rotating Bowl\nEffortless hands free preparation\nPowerful 300W Motor\n5 Speed Control\nTurbo function with safety device\nEject Button for easy assembly\n2 Pairs of Stainless Steel beaters and dough hooks\n100% Copper Motor', 3495.00, 'Books', NULL, '2023-12-30 12:34:58');
+(7, 1, 'Von VSMS03PLX Stand Mixer 4L, 300W - Stainless Steel', 'Stand Mixer\nBlack\n4L Stainless Steel Bowl with base\nAuto-Rotating Bowl\nEffortless hands free preparation\nPowerful 300W Motor\n5 Speed Control\nTurbo function with safety device\nEject Button for easy assembly\n2 Pairs of Stainless Steel beaters and dough hooks\n100% Copper Motor', 3495.00, 'Books', NULL, '2023-12-30 12:34:58'),
+(12, 1, 'PS5 Game Console', 'ps5', 85000.00, 'Video Games', NULL, '2023-12-30 17:00:20');
 
 -- --------------------------------------------------------
 
@@ -97,7 +98,9 @@ CREATE TABLE `product_images` (
 --
 
 INSERT INTO `product_images` (`image_id`, `product_id`, `image_url`) VALUES
-(11, 7, 'productuploads/broken pipe.jpg');
+(11, 7, 'productuploads/broken pipe.jpg'),
+(19, 12, 'productuploads/download.jpg'),
+(20, 12, 'productuploads/ps5 controller.jpg');
 
 -- --------------------------------------------------------
 
@@ -216,13 +219,13 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `image_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `sellers`
