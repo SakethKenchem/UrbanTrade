@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $phonenumber = $_POST['phonenumber'];
-    //location
+    
     $location = $_POST['location'];
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
