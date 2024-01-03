@@ -1,0 +1,6 @@
+#ignore .txt and sql files.
+
+*.txt
+*.sql
+*.md
+*productuploads/
